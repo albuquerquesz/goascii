@@ -11,9 +11,9 @@ go build -o goascii ./cmd/goascii
 ## Usage
 
 ```bash
-./goascii create "victor"
-./goascii create -f slant "victor"
-./goascii create -o ./ascii.txt "victor"
+./goascii create "alexsa"
+./goascii create -f slant "alexsa"
+./goascii create -o ./ascii.txt "alexsa"
 ```
 
 After rendering, you can press:
