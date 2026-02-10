@@ -41,7 +41,12 @@ func PromptActions(asciiOutput string) {
 		case 'c', 'C':
 			copyToClipboard(asciiOutput)
 		case 'o', 'O':
+			_ = term.Restore(fd, oldState)
 			path := promptPath()
+			oldState, err = term.MakeRaw(fd)
+			if err != nil {
+				return
+			}
 			if strings.TrimSpace(path) == "" {
 				fmt.Fprintln(os.Stderr, "No output path provided")
 				continue

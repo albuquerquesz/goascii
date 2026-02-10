@@ -24,22 +24,12 @@ var createCmd = &cobra.Command{
 		outPath, _ := cmd.Flags().GetString("out")
 		isTTY := isatty.IsTerminal(os.Stdin.Fd())
 
-		if font == "" {
-			if !isTTY {
-				return errors.New("non-interactive mode requires --font")
-			}
-			selected, err := promptFont()
-			if err != nil {
-				return err
-			}
-			font = selected
+		resolvedFont, err := resolveFont(font, isTTY)
+		if err != nil {
+			return err
 		}
 
-		if !ascii.IsValidFont(font) {
-			return fmt.Errorf("invalid font: %s", font)
-		}
-
-		output := ascii.Render(text, font)
+		output := ascii.Render(text, resolvedFont)
 		fmt.Fprint(os.Stdout, output)
 
 		if outPath != "" {
@@ -59,6 +49,25 @@ var createCmd = &cobra.Command{
 func init() {
 	createCmd.Flags().StringP("font", "f", "", "Font name")
 	createCmd.Flags().StringP("out", "o", "", "Write output to a file")
+}
+
+func resolveFont(font string, isTTY bool) (string, error) {
+	if font == "" {
+		if !isTTY {
+			return "", errors.New("non-interactive mode requires --font")
+		}
+		selected, err := promptFont()
+		if err != nil {
+			return "", err
+		}
+		font = selected
+	}
+
+	if !ascii.IsValidFont(font) {
+		return "", fmt.Errorf("invalid font: %s", font)
+	}
+
+	return font, nil
 }
 
 func promptFont() (string, error) {

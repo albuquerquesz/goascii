@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/albuquerquesz/goascii/cmd/goascii/cmd"
+	"github.com/albuquerquesz/goascii/cmd"
 )
 
 func main() {
